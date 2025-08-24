@@ -27,7 +27,7 @@ jobs:
 
     # 3️⃣ Azure login via OIDC
     - name: Azure Login via OIDC
-      uses: azure/login@v2.22.0
+      uses: azure/login@v2.3.0
       with:
         client-id: e924e888-00fb-4df1-a64a-1650fb7aa753       # from Azure AD app
         tenant-id: 17016688-2c7b-40cc-a62c-a9c20221bd56          # Azure tenant ID
