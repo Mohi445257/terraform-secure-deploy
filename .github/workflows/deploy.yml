@@ -22,7 +22,8 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: 1.6.9   # latest stable version
+        terraform_version: latest
+
 
     # 3️⃣ Azure login via OIDC
     - name: Azure Login via OIDC
