@@ -1,9 +1,12 @@
 name: Secure Deploy
 
-on: [push]
+on:
+  push:
+    branches:
+      - main   # Run workflow on main branch
 
 permissions:
-  id-token: write   # required for OIDC
+  id-token: write   # Required for OIDC
   contents: read
 
 jobs:
@@ -11,19 +14,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
+    # Step 1: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v4
 
-    # ✅ Replace this step with OIDC login
+    # Step 2: Setup Terraform
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.13.0   # Change if needed
+
+    # Step 3: Azure login via OIDC
     - name: Azure Login via OIDC
       uses: azure/login@v2
       with:
         client-id: <e924e888-00fb-4df1-a64a-1650fb7aa753>        # from Azure AD app
         tenant-id: <17016688-2c7b-40cc-a62c-a9c20221bd56>           # Azure tenant ID
         subscription-id: <ce6ae346-d4fd-4aab-82d7-7db942b501d6> # Azure subscription ID
-        auth-type: oidc                        # important for OIDC login
+        auth-type: oidc
 
+    # Step 4: Terraform Init & Plan
     - name: Terraform Init & Plan
       run: |
         terraform init
         terraform plan
+
+    # Step 5: Optional Terraform Apply
+    # Uncomment if you want to deploy automatically
+    # - name: Terraform Apply
+    #   run: |
+    #     terraform apply -auto-approve
